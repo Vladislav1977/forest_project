@@ -3,7 +3,7 @@
 The project is based on Forest Cover Type dataset, currently running on [Kaggle competition](https://www.kaggle.com/competitions/forest-cover-type-prediction/overview).
 
 The aim of this project:
-- test some ML techniques (Logistic Regression, SVM, Gradient Boosting,  Extremely Randomized Trees and FC NN) to achieve high prediction score.
+- test some ML techniques (Logistic Regression, SVM, Gradient Boosting,  Extremely Randomized Trees and Fully Connected Neural Network) to achieve high prediction score.
 - implement convenient and simple way for training above techniques and making their predictions.
 
 # FEATURE ENGINEERING
@@ -12,6 +12,9 @@ The main part playing incredible role in model evaluation.
 
 `Soil_Type15`, `Soil_Type7` columns were dropped.
 Two set of features were made. The first one with the most important features. And the second one with additional features added to the previous set.
+
+Features importance were estimated by `feature_importances_` method of **sklearn ExtraTreesClassifier**.
+
 
 <table>
   <tr>
@@ -103,7 +106,7 @@ Two set of features were made. The first one with the most important features. A
   </tr>
 </table>
 
-Numeric features were standardized by removing the mean and scaling to unit variance.
+Numeric features were standardized by removing the mean and scaling to unit variance for none tree methods.
 
 # Results
 
@@ -136,7 +139,7 @@ The best scores for each model are shown below.
       <td>0.78084</td>
   </tr>
         <tr>
-      <td> gradboost (X_2) </td>
+      <td> extree (X_2) </td>
       <td>0.8220238095238095</td>
       <td>0.81067</td>
   </tr>
@@ -146,3 +149,41 @@ The best scores for each model are shown below.
       <td>0.73174</td>
   </tr>
 </table>
+
+# USAGE
+1. Clone this repository to your machine. 
+2. Make sure Python 3.10.* 
+3. Install the project dependencies (*run this and following commands in a terminal, from the root of a cloned repository*):
+
+Below is the instruction for `logreg`, `SVM`, `gradboost` and `extree`.
+- **cross_val**
+```sh
+python ML_app.py cross_val <dataset> <scaler> <model> [unknown args] 
+```
+For example:
+```sh
+python ML_app.py cross_val X_2 transform_2 logreg --C 10 
+```
+- **hypersearch**
+```sh
+python ML_app.py hypersearch <dataset> <scaler> <model> [--max eval <the number of models to fit>]
+```
+-  **predict**
+```sh
+python ML_app.py predict <dataset> <scaler> <model> <name> [unknown args] 
+```
+For parameter options check ML_app.py Config.
+
+Below is the instruction for FCNN model.
+
+**!** FCNN model must be run from FNN directory.
+
+To **train** | **cross validate**:
+```sh
+python cross_val_nn.py | train_nn.py <dataset> <scaler> <model> [--epoches <n_eoches>, --save_name <path/to/save_model/name>]
+```
+To **predict**:
+```sh
+python predict.py <path/to/model/weights> <path/to/save/name.csv>
+```
+
