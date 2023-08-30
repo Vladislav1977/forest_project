@@ -164,6 +164,7 @@ For example:
 ```sh
 python ML_app.py cross_val X_2 transform_2 logreg --C 10 
 ```
+To view Mlflow tracking experiments run `mlflow ui` from terminal.
 - **hypersearch**
 ```sh
 python ML_app.py hypersearch <dataset> <scaler> <model> [--max eval <the number of models to fit>]
@@ -174,9 +175,7 @@ python ML_app.py predict <dataset> <scaler> <model> <name> [unknown args]
 ```
 For parameter options check ML_app.py Config.
 
-Below is the instruction for FCNN model.
-
-**!** FCNN model must be run from FNN directory.
+Below is the instruction for FCNN model. **!** FCNN model must be run from FNN directory.
 
 To **train** | **cross validate**:
 ```sh

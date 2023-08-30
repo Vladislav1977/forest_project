@@ -27,7 +27,7 @@ def cross_val_nn(opt):
     X, y = CONFIG_NN["dataset_train"][opt.X], CONFIG_NN["dataset_train"]["y"]
     scaler = CONFIG_NN["scaler"][opt.scaler]
 
-    epoches, save, name = opt.epoches, opt.save, opt.name
+    epoches, name = opt.epoches, opt.save_name
 
     if scaler is not None:
         X_nn = scaler.fit_transform(X)
@@ -89,9 +89,7 @@ def cross_val_nn(opt):
                     )
 
         kfold_acc.append(np.mean(accuracy_stats["val"][-10:]))
-    if save:
-        if name is None:
-            raise ValueError("name must be specified.")
+    if name:
         model_NN.save_model(scaler, name, opt.X)
     print(kfold_acc)
     return kfold_acc

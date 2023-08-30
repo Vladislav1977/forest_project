@@ -15,11 +15,7 @@ import hyperopt
 from hyperopt import space_eval, STATUS_OK
 
 
-
-
-
-
-class Base_model:
+class Base_Model:
 
     def __init__(self, model, X, y, scaler):
 
@@ -47,8 +43,17 @@ class Base_model:
 
     def cross_val(self):
 
+        params = self.model["model"].get_params()
+        model_name = self.model["model"].__class__.__name__
+        log_param(params, model_name)
+
         if self.cv.__name__ == 'cross_val_score':
             cv = self.cv(self.model, self.X, self.y, scoring="accuracy")
+            params = self.model["model"].get_params()
+
+            mlflow.log_metric("accuracy", cv.mean())
+            mlflow.end_run()
+
             print("Mean CV:", cv.mean())
             return None
         else:
@@ -63,6 +68,10 @@ class Base_model:
             max_est = cv["test-Accuracy-mean"].argmax() + 1
             message = f"Max. mean accuracy: {max_val}, best_est: {max_est}"
             print(message)
+
+            mlflow.log_metric("max_accuracy", max_val)
+            mlflow.log_metric("best_est", max_est)
+            mlflow.end_run()
             return None
 
     def hypersearch(self, params, max_evals=50):

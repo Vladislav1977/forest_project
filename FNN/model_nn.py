@@ -68,6 +68,7 @@ class NN_model:
             "optimizer": self.optimizer.state_dict(),
             "X_type": X_type
         }
+
         torch.save(checkpoint, filename)
       #  print("Saving checkpoint")
 

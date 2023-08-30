@@ -25,10 +25,10 @@ class Config_parse:
         parser.add_argument("X", type=str)
         parser.add_argument("scaler", type=str)
         parser.add_argument("--epoches", type=int, default=150)
-        parser.add_argument("--save", action='store_true')
-        parser.add_argument("--name", type=str)
+    #    parser.add_argument("--save", action='store_true')
+        parser.add_argument("--save_name", type=str)
 
-        parser.add_argument("--device", type=str, default="cpu", choices=["cpu", "cuda"])
+       # parser.add_argument("--device", type=str, default="cpu", choices=["cpu", "cuda"])
 
         self.initialized = True
         return parser

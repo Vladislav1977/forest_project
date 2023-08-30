@@ -22,8 +22,7 @@ def train(opt):
     y = CONFIG_NN["dataset_train"]["y"]
     scaler = CONFIG_NN["scaler"][opt.scaler]
 
-    save = opt.save
-    name = opt.name
+    save = opt.save_name
     epoches = opt.epoches
 
     if scaler is not None:
@@ -64,9 +63,9 @@ def train(opt):
                 f'Epoch {epoch}: | Train Loss: {loss_stats[epoch]}   | Train Acc: {accuracy_stats[epoch]}'
                 )
 
-    if opt.save:
+    if opt.save_name:
         try:
-            model_NN.save_model(scaler, name, opt.X)
+            model_NN.save_model(scaler, save, opt.X)
             print("model saved")
         except AttributeError as AE:
             print("Save Error. Save Name should be defined (expected to be string)")

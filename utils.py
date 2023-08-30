@@ -6,7 +6,7 @@ import numpy as np
 
 from hyperopt import space_eval, STATUS_OK
 import ast
-
+import mlflow
 
 def hyperopt_objective_extr(params, model, cv, X, y):
 
@@ -31,6 +31,17 @@ def hyperopt_objective_extr(params, model, cv, X, y):
 
         return {"loss": 1 - best_acc, "params": params, "status": STATUS_OK, "iter": best_iteration}
 
+
+param_log = {"CatBoostClassifier":["l2_leaf_reg", 'learning_rate', 'depth'],
+ "LogisticRegression": ["penalty", "solver", "C", "max_iter"],
+ "SVC": ["C", "gamma"],
+ "ExtraTreesClassifier": ["n_estimators", "min_samples_split", "min_samples_leaf"]}
+
+def log_param(params, model_name):
+
+    mlflow.log_param("model", model_name)
+    for i in param_log[model_name]:
+        mlflow.log_param(i, params[i])
 
 def string_parse(str_arg):
     try:

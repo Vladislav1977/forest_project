@@ -53,7 +53,7 @@ CONFIG = {"dataset":
                "gradboost": CatBoostClassifier(depth = 7,
                                                l2_leaf_reg=0.5552399305644247,
                                                learning_rate=0.1798420272630059,
-                                               iterations=989,
+                                               iterations=985,
                                                eval_metric="Accuracy",
                                                random_seed=42,
                                                verbose=False,
@@ -89,7 +89,8 @@ class Ml_app(object):
 
 The most commonly used git commands are:
    cross_val     cross validation
-   hypersearch      Bayes Hypersearch tuning
+   hypersearch   Bayes Hypersearch tuning
+   predict       Predict on test set
 ''')
         parser.add_argument('command', help='Subcommand to run')
         # parse_args defaults to [1:] for args, but you need to
@@ -109,8 +110,7 @@ The most commonly used git commands are:
         parser.add_argument('dataset', choices=["X_1", "X_2", "X_3"])
         parser.add_argument('scaler', choices=["None", "std", "transform_1", "transform_2", "transform_3"])
         parser.add_argument('model', choices=["logreg", "SVM", "gradboost", "extree"])
-        #for hypersearch
-        parser.add_argument('--max_eval', type=int, default=50)
+        parser.add_argument('--max_eval', type=int, default=50) #for hypersearch
         if predict:
             parser.add_argument("name", type=str, help='Define file name')
 
@@ -129,20 +129,24 @@ The most commonly used git commands are:
             self.name = args.name
         self.y = CONFIG["dataset"]["y"]
         self.max_eval = args.max_eval
-
+        self.args = args
         if len(unknown) > 0:
             model_arg = parse_unknown(unknown)
             self.model.set_params(**model_arg)
 #            print(self.model)
 
-        self.base = Base_model(self.model,
+        self.base = Base_Model(self.model,
                           self.X,
                           self.y,
                           self.scaler)
 
     def cross_val(self):
 
+        mlflow.start_run()
+
         self.parser_init()
+        mlflow.log_param("dataset", self.args.dataset)
+        mlflow.log_param("scaler", self.args.scaler)
 
         print("Running cross validation")
 
